@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assessment Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="text-align:center; padding-top:50px;">
+    <div class="container" style="max-width: 600px;">
+        <h3 style="color: #888; letter-spacing: 2px;">ASSESSMENT COMPLETE</h3>
+        
+        <div style="
+            width: 180px; 
+            height: 180px; 
+            border-radius: 50%; 
+            border: 8px solid {{ color }}; 
+            color: {{ color }}; 
+            font-size: 50px; 
+            font-weight: bold;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 30px auto;
+            box-shadow: 0 0 30px {{ color }}40;
+            text-shadow: 0 0 10px {{ color }};
+        ">
+            {{ score }} / {{ max }}
+        </div>
+
+        <h1 style="color: {{ color }}; font-size: 2.5em; text-transform: uppercase; margin-bottom: 10px;">{{ rank }}</h1>
+        <p style="color: #ccc; font-size: 1.2em; line-height: 1.6;">{{ msg }}</p>
+        
+        <br><hr style="border-color: #333;"><br>
+        
+        <a href="/dashboard">
+            <button class="btn-main" style="border-color: {{ color }}; color: {{ color }};">
+                Return to Dashboard
+            </button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workspace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body { overflow: hidden; background: #050510; }
+        .workspace { display: flex; height: 92vh; }
+        .panel-left { width: 40%; border-right: 1px solid #333; padding: 25px; background: #0a0a15; overflow-y: auto; }
+        .panel-right { width: 60%; display: flex; flex-direction: column; background: #1e1e1e; }
+        .problem-title { font-size: 24px; color: #fff; margin-bottom: 10px; }
+        .problem-desc { color: #ccc; line-height: 1.6; margin-bottom: 20px; }
+        #code-input { width: 100%; height: 100%; background: transparent; color: transparent; caret-color: white; border: none; position: absolute; top: 0; left: 0; padding: 20px; font-family: 'Courier New', monospace; font-size: 15px; z-index: 2; outline: none; resize: none; }
+        #code-display { width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 20px; font-family: 'Courier New', monospace; font-size: 15px; z-index: 1; margin: 0; pointer-events: none; }
+        #feedback-box { display: none; margin-top: 15px; padding: 15px; border-radius: 5px; }
+        .success { border: 1px solid #00ff00; color: #00ff00; }
+        .error { border: 1px solid #ff0000; color: #ff3333; }
+    </style>
+</head>
+<body>
+    <div class="navbar"><h3>C FOR U ADVANCED IDE</h3><a href="/dashboard" style="color:#888;">&larr; Back</a></div>
+    <div class="workspace">
+        <div class="panel-left">
+            <div id="p-title" class="problem-title">Loading...</div>
+            <div id="p-desc" class="problem-desc">...</div>
+            <button onclick="validateCode()" class="btn-main">▶ Run Code</button>
+            <div id="feedback-box"></div>
+        </div>
+        <div class="panel-right">
+            <div style="flex:1; position:relative;">
+                <pre id="code-display" class="language-c"></pre>
+                <textarea id="code-input" spellcheck="false" oninput="updateHighlight()"></textarea>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script>
+        const category = "{{ category }}";
+        const problemBank = {
+            'basics': [
+                { t: "Static Persistence", d: "Create a function `count()` using a static variable to count how many times it is called.", req: ["static", "int", "++"], sol: "static int x = 0; x++;" },
+                { t: "Define Macro", d: "Create a Macro `SQUARE(x)` that returns x*x using #define.", req: ["#define", "SQUARE", "*"], sol: "#define SQUARE(x) (x*x)" }
+            ],
+            'loops': [
+                { t: "Pointer Arithmetic Loop", d: "Traverse an array using a pointer increment (ptr++) in a loop.", req: ["while", "*ptr", "++"], sol: "while(*ptr) { ptr++; }" },
+                { t: "Recursion Factorial", d: "Write a recursive function to find factorial.", req: ["return", "*", "fact"], sol: "return n * fact(n-1);" }
+            ],
+            'arrays': [
+                { t: "Pointer to Array", d: "Access array elements using a pointer dereference `*(arr + i)`.", req: ["*", "+", "for"], sol: "printf(\"%d\", *(arr+i));" },
+                { t: "Cmd Line Args", d: "Write a main function accepting argc and argv.", req: ["argc", "argv", "main"], sol: "int main(int argc, char *argv[])" }
+            ],
+            'functions': [
+                { t: "Union Size", d: "Define a union with int and float. Assign value to int and print float.", req: ["union", "int", "float"], sol: "union Data { int i; float f; };" },
+                { t: "File Open", d: "Use `fopen` to open 'data.txt' in read mode.", req: ["fopen", "FILE", "\"r\""], sol: "FILE *fp = fopen(\"data.txt\", \"r\");" }
+            ]
+        };
+
+        let currentProblem = {};
+        function generateProblem() {
+            const problems = problemBank[category];
+            currentProblem = problems[Math.floor(Math.random() * problems.length)];
+            document.getElementById('p-title').innerText = currentProblem.t;
+            document.getElementById('p-desc').innerText = currentProblem.d;
+            document.getElementById('code-input').value = "#include <stdio.h>\n\nint main() {\n    // Write code here\n    return 0;\n}";
+            updateHighlight();
+        }
+
+        function validateCode() {
+            const userCode = document.getElementById('code-input').value;
+            const box = document.getElementById('feedback-box');
+            const missing = currentProblem.req.filter(w => !userCode.includes(w));
+            box.style.display = 'block';
+            if(missing.length > 0) { box.className = "error"; box.innerHTML = `❌ Missing keywords: ${missing.join(', ')}`; }
+            else { box.className = "success"; box.innerHTML = `✅ Logic Correct! Concepts Applied.`; }
+        }
+
+        function updateHighlight() {
+            let code = document.getElementById('code-input').value;
+            if(code[code.length-1] == "\n") code += " "; 
+            document.getElementById('code-display').innerHTML = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            Prism.highlightElement(document.getElementById('code-display'));
+        }
+        
+        document.getElementById('code-input').addEventListener('scroll', function() {
+            document.getElementById('code-display').scrollTop = this.scrollTop;
+            document.getElementById('code-display').scrollLeft = this.scrollLeft;
+        });
+        generateProblem();
+    </script>
+</body>
+</html>

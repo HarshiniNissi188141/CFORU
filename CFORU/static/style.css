@@ -1,0 +1,117 @@
+/* --- C FOR U: NEON CYBERPUNK THEME --- */
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #050510; /* Void Black */
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #0a0a15;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+    border: 1px solid #1a1a2e;
+    border-radius: 15px;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #050510;
+    border-bottom: 1px solid #333;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar h2 { margin: 0; color: #fff; text-shadow: 0 0 5px #fff; }
+
+/* CARDS */
+.card {
+    background-color: #11111f;
+    border: 1px solid #2a2a40;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    transition: 0.3s;
+    text-align: left;
+    color: #ccc;
+}
+.card:hover {
+    transform: translateY(-3px);
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    color: #fff;
+}
+
+/* BUTTONS */
+button, .btn-main {
+    background: transparent;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    padding: 10px 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+button:hover, .btn-main:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    color: #fff;
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, h4 { color: #fff; margin-top: 0; }
+h3 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px; color: #888; font-size: 16px; letter-spacing: 1px; }
+
+/* GRID */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* FORMS */
+input {
+    background: #0a0a15;
+    border: 1px solid #333;
+    color: #00ffff;
+    padding: 15px;
+    width: 90%;
+    border-radius: 5px;
+    font-family: monospace;
+    outline: none;
+}
+input:focus { border-color: #00ffff; box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); }
+
+/* LEETCODE TABLE */
+.problem-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.problem-table th { text-align: left; padding: 15px; color: #666; border-bottom: 1px solid #333; font-size: 12px; }
+.problem-table td { padding: 15px; border-bottom: 1px solid #1a1a2e; color: #ccc; font-size: 14px; }
+.problem-table tr:hover { background: #13131f; }
+
+/* PPT SCREEN */
+.ppt-screen {
+    background: #000;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 30px;
+    min-height: 250px;
+    border-radius: 10px;
+    font-size: 18px;
+    line-height: 1.6;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+}
+
+/* UTILS */
+.locked-item { opacity: 0.5; cursor: not-allowed; border-style: dashed; }
+.footer { margin-top: 50px; text-align: center; color: #444; font-size: 12px; border-top: 1px solid #111; padding-top: 20px; }
+.founder-name { color: #ff00ff; font-weight: bold; }

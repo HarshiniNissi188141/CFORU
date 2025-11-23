@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certified!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="text-align:center; padding-top:80px;">
+    <div class="container" style="max-width: 700px; border-color: #00ff00; box-shadow: 0 0 40px rgba(0, 255, 0, 0.1);">
+        <h1 style="color: #00ff00; font-size: 4em; text-shadow: 0 0 20px #00ff00;">🚀 CERTIFIED!</h1>
+        <p style="font-size: 1.2em; color: #fff;">Congratulations, Founder!</p>
+        
+        <div class="card" style="background: rgba(0, 255, 0, 0.05); border: 1px solid #00ff00;">
+            <p>We have sent a secure package to your email containing:</p>
+            <ul style="text-align: left; color: #ccc; list-style: none; padding: 0;">
+                <li style="padding: 5px;">✅ Official C FOR U Certificate</li>
+                <li style="padding: 5px;">✅ The Ultimate Mind Map</li>
+                <li style="padding: 5px;">✅ Revision Notes PDF</li>
+            </ul>
+        </div>
+
+        <h3>Instant Access:</h3>
+        <div class="module-grid">
+            <a href="/download/mindmap.pdf" style="text-decoration: none;"><button class="card" style="cursor: pointer;">⬇️ Download Mind Map</button></a>
+            <a href="/download/revision.pdf" style="text-decoration: none;"><button class="card" style="cursor: pointer;">⬇️ Download Revision</button></a>
+        </div>
+        
+        <br>
+        <a href="/dashboard"><button class="btn-main">Return to Headquarters</button></a>
+    </div>
+</body>
+</html>

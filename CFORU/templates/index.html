@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C FOR U - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="display:flex; justify-content:center; align-items:center; height:100vh; background: #050510;">
+    <div class="container" style="text-align: center; width: 400px; border: 2px solid #00ffff; box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);">
+        <h1 style="color: #fff; font-size: 3em; margin-bottom: 5px; text-shadow: 0 0 10px #00ffff;">C FOR U</h1>
+        <p style="color: #ff00ff; letter-spacing: 3px; font-size: 12px; margin-bottom: 30px;">ELITE CODING PLATFORM</p>
+        
+        <div class="card" style="background: #111; border: 1px solid #333;">
+            <form action="/register" method="POST">
+                <label style="color: #888; display: block; text-align: left; margin-bottom: 5px; font-size: 12px;">CODENAME / FULL NAME</label>
+                <input type="text" name="fullname" placeholder="e.g. Harshini R." required style="margin-bottom: 20px;">
+                
+                <label style="color: #888; display: block; text-align: left; margin-bottom: 5px; font-size: 12px;">SECURE EMAIL</label>
+                <input type="email" name="email" placeholder="user@example.com" required style="margin-bottom: 20px;">
+                
+                <button type="submit" class="btn-main" style="background: #00ffff; color: #000; border: none;">INITIALIZE SYSTEM >></button>
+            </form>
+        </div>
+        
+        <p class="footer" style="margin-top: 20px; font-size: 10px; color: #555;">SYSTEM FOUNDED BY <span style="color: #ff00ff;">HARSHINI RACHAKONDA</span></p>
+    </div>
+</body>
+</html>

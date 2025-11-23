@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='course.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; }
+        .modal-content { background: #1e1e1e; margin: 2% auto; width: 85%; height: 85vh; border: 1px solid #444; display: flex; flex-direction: column; }
+        .ide-header { background: #252526; padding: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
+        .code-area { flex: 1; overflow: auto; padding: 0; margin: 0; background: #1e1e1e; }
+        pre { margin: 0 !important; height: 100%; }
+        .db-badge { background: #000; color: #00ff00; border: 1px solid #00ff00; padding: 4px 8px; font-size: 11px; border-radius: 4px; }
+        
+        /* IMAGE MODAL STYLES */
+        .img-modal-content { margin: 5% auto; display: block; width: 80%; max-width: 1000px; border: 2px solid #00ffff; box-shadow: 0 0 20px #00ffff; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>{{ user.name }}</h2>
+        <div style="color:#00ffff; border:1px solid #00ffff; padding:5px 15px; border-radius:20px;">XP: {{ user.points }}</div>
+    </div>
+
+    <div class="container">
+        <h3>1. Advanced Concepts Modules</h3>
+        <div class="module-grid">
+            <button class="card" onclick="loadUnit('unit1')">Unit I: Storage Classes</button>
+            <button class="card" onclick="loadUnit('unit2')">Unit II: Pointers & logic</button>
+            <button class="card" onclick="loadUnit('unit3')">Unit III: Arrays vs Pointers</button>
+            <button class="card" onclick="loadUnit('unit4')">Unit IV: Structures & Files</button>
+        </div>
+        
+        <div id="learning-area" style="display:none; margin-top:20px;">
+            <div class="ppt-screen"><div id="slide-display"></div></div>
+            <div style="text-align: center; margin-top: 10px;">
+                <button onclick="prevSlide()" style="width:auto;">&#8592;</button>
+                <span id="slide-counter" style="margin:0 15px; color:#00ffff;">1/10</span>
+                <button onclick="nextSlide()" style="width:auto;">&#8594;</button>
+            </div>
+            <button id="finish-btn" onclick="finishUnit()" style="display:none; background:green; margin-top:10px;">Complete Unit (+50 XP)</button>
+        </div>
+
+        <h3>2. Infinite Advanced Database</h3>
+        <div class="module-grid">
+            <div class="card"><h4>🔹 Storage & Macros</h4><div class="db-badge">⚡ Auto/Static Examples</div><br><button onclick="openLibrary('basics')">Open Library</button></div>
+            <div class="card"><h4>🔁 Pointer Logic</h4><div class="db-badge">⚡ Arithmetic & Void Ptr</div><br><button onclick="openLibrary('loops')">Open Library</button></div>
+            <div class="card"><h4>🗂️ Adv. Arrays</h4><div class="db-badge">⚡ Pointers to Arrays</div><br><button onclick="openLibrary('arrays')">Open Library</button></div>
+            <div class="card"><h4>⚙️ Structs & Files</h4><div class="db-badge">⚡ Unions & File IO</div><br><button onclick="openLibrary('functions')">Open Library</button></div>
+        </div>
+
+        <h3>3. Practice & Certification</h3>
+        <div class="module-grid">
+            <button class="card" style="border-color: #ffff00; color: #ffff00;" onclick="window.location.href='/quiz?type=practice'">♾️ Infinite Practice (Hard)</button>
+            <button class="card" onclick="window.location.href='/quiz?type=mockA'">📝 Mock A (Pointers)</button>
+            <button class="card" onclick="window.location.href='/quiz?type=mockB'">📝 Mock B (Memory)</button>
+            <button class="card" onclick="window.location.href='/quiz?type=mockC'">📝 Mock C (Structs)</button>
+            <button class="card" onclick="window.location.href='/quiz?type=mockD'">📝 Mock D (Files)</button>
+            <button class="card" style="border-color: #ff00ff; color: #ff00ff;" onclick="window.location.href='/quiz?type=final'">🏆 Final Assessment (75% Pass)</button>
+        </div>
+
+        <h3>4. Premium Downloads</h3>
+        <div class="module-grid">
+            {% if user.final_score >= 38 %}
+                <button class="card" style="border-color: #00ff00; color: #00ff00;" onclick="viewMindMap()">👁️ View Mind Map</button>
+                <button class="card" style="border-color: #00ff00; color: #00ff00;" onclick="download('mindmap.pdf')">⬇️ Download Mind Map</button>
+                <button class="card" style="border-color: #00ff00; color: #00ff00;" onclick="download('revision.pdf')">⬇️ Download Revision PDF</button>
+            {% else %}
+                <button class="card locked-item">👁️ View Mind Map (Locked 🔒)</button>
+                <button class="card locked-item">⬇️ Score 75% to Unlock</button>
+                <button class="card locked-item">⬇️ Score 75% to Unlock</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="ide-header">
+                <span style="color:#ccc; font-weight:bold;">C FOR U IDE / <span id="exName">Example.c</span></span>
+                <span onclick="document.getElementById('codeModal').style.display='none'" style="color:red; cursor:pointer;">✖</span>
+            </div>
+            <div class="code-area">
+                <pre><code id="codeBlock" class="language-c"></code></pre>
+            </div>
+            <div style="padding:10px; background:#252526; display:flex; justify-content:space-between;">
+                <button onclick="prevExample()" style="width:auto;">&#8592; Prev</button>
+                <span id="exCounter" style="color:#888;">Live Generated</span>
+                <button onclick="nextExample()" style="width:auto;">Generate New Variant >></button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mindmapModal" class="modal" onclick="document.getElementById('mindmapModal').style.display='none'">
+        <img style="display:block; margin:5% auto; max-width:90%; border:2px solid #00ffff;" src="{{ url_for('static', filename='mindmap.png') }}">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script>
+        // --- INFINITE GENERATOR (UPDATED WITH ADVANCED CONCEPTS) ---
+        const templates = {
+            'basics': (i) => `#include <stdio.h>\n// Example: Static Variables & Persistence\nvoid counter_v${i}() {\n    static int count = ${i};\n    count++;\n    printf("%d ", count);\n}\nint main() {\n    counter_v${i}();\n    counter_v${i}();\n    return 0;\n}`,
+            'loops': (i) => `#include <stdio.h>\n// Example: Pointer Arithmetic\nint main() {\n    int arr[] = {${i}, ${i+10}, ${i+20}};\n    int *ptr = arr;\n    printf("%d ", *ptr); // Prints ${i}\n    ptr++;\n    printf("%d", *ptr); // Prints ${i+10}\n    return 0;\n}`,
+            'arrays': (i) => `#include <stdio.h>\n// Example: Array of Pointers\nint main() {\n    char *names[] = {"C", "C++", "Java"};\n    printf("%s", names[${i%3}]);\n    return 0;\n}`,
+            'functions': (i) => `#include <stdio.h>\n// Example: Union Memory Sharing\nunion Data {\n    int i;\n    float f;\n};\nint main() {\n    union Data d;\n    d.i = ${i*100};\n    printf("Int: %d, Float: %f", d.i, d.f); // Overlap!\n    return 0;\n}`
+        };
+        let currCat='', currIdx=1;
+        function openLibrary(c) { currCat=c; updateIDE(); document.getElementById('codeModal').style.display="block"; }
+        function nextExample() { currIdx++; updateIDE(); }
+        function prevExample() { if(currIdx>1) currIdx--; updateIDE(); }
+        function updateIDE() {
+            let code = templates[currCat](currIdx);
+            document.getElementById('exName').innerText = `Topic_${currCat}_${currIdx}.c`;
+            document.getElementById('codeBlock').textContent = code;
+            Prism.highlightElement(document.getElementById('codeBlock'));
+        }
+
+        // --- SLIDES ---
+        let sIdx=0, cSlides=[];
+        function loadUnit(u) { cSlides=courseData[u].slides; sIdx=0; showSlide(); document.getElementById('learning-area').style.display='block'; }
+        function showSlide() { 
+            let s=cSlides[sIdx]; 
+            document.getElementById('slide-display').innerHTML=`<h3>${s.title}</h3><p>${s.content}</p>`; 
+            document.getElementById('slide-counter').innerText=`${sIdx+1}/${cSlides.length}`;
+            document.getElementById('finish-btn').style.display = (sIdx===cSlides.length-1)?'inline-block':'none';
+        }
+        function nextSlide() { if(sIdx<cSlides.length-1) { sIdx++; showSlide(); } }
+        function prevSlide() { if(sIdx>0) { sIdx--; showSlide(); } }
+        
+        function finishUnit() {
+            fetch('/update_points', {method:'POST'}).then(()=>{
+                alert('Unit Complete! +50 XP');
+                document.getElementById('learning-area').style.display='none';
+                location.reload();
+            });
+        }
+        function viewMindMap() { document.getElementById('mindmapModal').style.display='block'; }
+        function download(f) { window.location.href = "/download/" + f; }
+    </script>
+</body>
+</html>
